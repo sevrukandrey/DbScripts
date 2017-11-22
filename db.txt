@@ -4,7 +4,7 @@ USE car_shop;
 
 CREATE TABLE `client` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-`name` VARCHAR(25) DEFAULT NULL,
+`name` VARCHAR(25) NOT NULL,
 `surname` VARCHAR(25) DEFAULT NULL,
 `phone_number` VARCHAR(25) NOT NULL,
 UNIQUE (phone_number),
@@ -38,10 +38,19 @@ CREATE TRIGGER price_should_be_bigger_then_zero
   FOR EACH ROW
     BEGIN
     IF NEW.price <= 0
-    THEN SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'Price can not be 0';
+    THEN SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'Price can not be 0 or less';
    END IF;
  END;
 $$
+CREATE TRIGGER price_should_be_bigger_then_zero_on_update
+BEFORE UPDATE ON advert
+ FOR EACH ROW
+  BEGIN
+    IF NEW.price <= 0
+    THEN SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'Price can not be 0 or less';
+    END IF;
+  END;
+ $$ 
 DELIMITER ;
 
 CREATE TABLE `deal` (
