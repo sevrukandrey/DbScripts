@@ -14,16 +14,16 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `car` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-`car_number` VARCHAR(25) DEFAULT NULL,
-`year` YEAR(4) DEFAULT NULL,
+`vin_code` VARCHAR(25) NOT NULL,
+`year` YEAR(4) NOT NULL,
 `color` VARCHAR(20) DEFAULT NULL,
-`model` VARCHAR(20) DEFAULT NULL,
+`model` VARCHAR(20) NOT NULL,
 PRIMARY KEY (id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `advert`(
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-`car_id` BIGINT UNSIGNED NOT NULL UNIQUE,
+`car_id` BIGINT UNSIGNED NOT NULL,
 `seller_id` BIGINT UNSIGNED NOT NULL,
 `price` DOUBLE UNSIGNED NOT NULL,
 `deal_id` BIGINT UNSIGNED DEFAULT NULL,
@@ -64,6 +64,27 @@ FOREIGN KEY (buyer_id) REFERENCES `client`(id),
 FOREIGN KEY (advert_id) REFERENCES advert(id)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
 
+DELIMITER $$
+CREATE TRIGGER price_in_deal_should_be_bigger_then_zero
+  BEFORE INSERT ON deal
+  FOR EACH ROW
+    BEGIN
+    IF NEW.price <= 0
+    THEN SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'Price can not be 0 or less';
+   END IF;
+ END;
+$$
+CREATE TRIGGER price_in_deal_should_be_bigger_then_zero_on_update
+BEFORE UPDATE ON deal
+ FOR EACH ROW
+  BEGIN
+    IF NEW.price <= 0
+    THEN SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'Price can not be 0 or less';
+    END IF;
+  END;
+ $$ 
+DELIMITER ;
+
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Andrey", "Sevruk","093-774");
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Sasha", "Ivanov","100-589");
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Vova", "Petrov","789-526");
@@ -101,22 +122,22 @@ INSERT INTO `client`(NAME,surname,phone_number) VALUES ("123", "3333","145585");
 SELECT MAX(d.price), a.car_id 
 FROM `deal` AS d 
 JOIN `advert` AS a ON 
-d.advert_id = a.`advert_id`
-WHERE d.status = "Active"
-GROUP BY d.advert_id
+d.`advert_id` = a.`advert_id`
+WHERE a.`deal_id` = "NULL"
+GROUP BY d.`advert_id`
 
 SELECT Max(d.`price`), a.`car_id`
 FROM `advert` AS a
 JOIN `deal` AS d
 ON 
-a.deal_id = d.id
-WHERE a.deal_id Is Not Null
+a.`deal_id` = d.`id`
+WHERE a.`deal_id` Is Not Null
 
 
-SELECT c.year,COUNT(c.year) AS year_count
- FROM advert AS a JOIN car AS c ON
-  a.car_id = c.id 
-  WHERE a.deal_id IS NOT NULL
-  GROUP BY c.year
+SELECT c.`year`,COUNT(c.`year`) AS year_count
+ FROM `advert` AS a JOIN `car` AS c ON
+  a.`car_id` = c.`id` 
+  WHERE a.`deal_id` IS NOT NULL
+  GROUP BY c.`year`
   ORDER BY year_count
   DESC Limit 1
