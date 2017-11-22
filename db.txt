@@ -9,7 +9,7 @@ CREATE TABLE `client` (
 `phone_number` VARCHAR(25) NOT NULL,
 UNIQUE (phone_number),
 PRIMARY KEY (`id`)
-)ENGINE=INNODB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `car` (
 `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -18,61 +18,60 @@ CREATE TABLE `car` (
 `color` VARCHAR(20) DEFAULT NULL,
 `model` VARCHAR(20) DEFAULT NULL,
 PRIMARY KEY (id)
-) ENGINE=INNODB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `advert` (
 `advert_id` INT(11) NOT NULL AUTO_INCREMENT,
 `car_id` INT(11) NOT NULL UNIQUE,
 `seller_id` INT(11) NOT NULL,
-`price` DOUBLE NOT NULL CHECK(price >0),
+`price` DOUBLE NOT NULL CHECK(price > 0),
 `status` ENUM('Open','Closed') DEFAULT 'Open',
 `deal_id` INT(11) DEFAULT NULL,
 PRIMARY KEY (advert_id),
 FOREIGN KEY (`car_id`) REFERENCES car(id),
-FOREIGN KEY (`seller_id`) REFERENCES `client`(id)
-) ENGINE=INNODB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+FOREIGN KEY (`seller_id`) REFERENCES client(id)
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `deal` (
 `id` INT(11) NOT NULL AUTO_INCREMENT,
 `buyer_id` INT(11) NOT NULL,
-`seller_id` INT(11) NOT NULL,
 `price` DOUBLE NOT NULL,
 `advert_id` INT(11) NOT NULL,
 `status` ENUM('Active','Reject','Approved') DEFAULT 'Active',
 PRIMARY KEY (`id`),
-FOREIGN KEY (buyer_id) REFERENCES `client`(id),
-FOREIGN KEY (seller_id) REFERENCES `client`(id)
-) ENGINE=INNODB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+FOREIGN KEY (buyer_id) REFERENCES client(id),
+FOREIGN KEY (advert_id) REFERENCES advert(advert_id)
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Andrey", "Sevruk","093-774");
-INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Sasha", "Ivanov","100-589"); 
+INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Sasha", "Ivanov","100-589");
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Vova", "Petrov","789-526");
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Sasha", "Ivanov","145585");
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Tom", "Deny","32123");
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Jack", "Tomer","14532211585");
 
-INSERT INTO `car`(car_number,YEAR,color,model) VALUES ("AA1312AA", 2015,"black","fiesta");
-INSERT INTO `car`(car_number,YEAR,color,model) VALUES ("AA9999AA", 2013,"green","x5");
-INSERT INTO `car`(car_number,YEAR,color,model) VALUES ("AA7777AA", 2016,"black","rio");
-INSERT INTO `car`(car_number,YEAR,color,model) VALUES ("AA5555AA", 2010,"black","c4");
-INSERT INTO `car`(car_number,YEAR,color,model) VALUES ("AA1234AA", 2013,"green","x3");
-INSERT INTO `car`(car_number,YEAR,color,model) VALUES ("AA4412AA", 2015,"black","golf");
-INSERT INTO `car`(car_number,YEAR,color,model) VALUES ("AA4315AA", 2003,"red","c1");
+INSERT INTO `car`(car_number, YEAR, color, model) VALUES ("AA1312AA", 2015,"black","fiesta");
+INSERT INTO `car`(car_number, YEAR, color, model) VALUES ("AA9999AA", 2013,"green","x5");
+INSERT INTO `car`(car_number, YEAR, color, model) VALUES ("AA7777AA", 2016,"black","rio");
+INSERT INTO `car`(car_number, YEAR, color, model) VALUES ("AA5555AA", 2010,"black","c4");
+INSERT INTO `car`(car_number, YEAR, color, model) VALUES ("AA1234AA", 2013,"green","x3");
+INSERT INTO `car`(car_number, YEAR, color, model) VALUES ("AA4412AA", 2015,"black","golf");
+INSERT INTO `car`(car_number, YEAR, color, model) VALUES ("AA4315AA", 2003,"red","c1");
 
-INSERT INTO `advert`(car_id,seller_id,price) VALUES (7,7,1000);
-INSERT INTO `advert`(car_id,seller_id,price) VALUES (8,7,2000);
-INSERT INTO `advert`(car_id,seller_id,price) VALUES (9,7,3000);
-INSERT INTO `advert`(car_id,seller_id,price) VALUES (10,8,800);
-INSERT INTO `advert`(car_id,seller_id,price) VALUES (11,9,700);
-INSERT INTO `advert`(car_id,seller_id,price) VALUES (12,10,600);
+INSERT INTO `advert`(car_id, seller_id, price) VALUES (1,1,1000);
+INSERT INTO `advert`(car_id, seller_id, price) VALUES (2,1,2000);
+INSERT INTO `advert`(car_id, seller_id, price) VALUES (3,1,3000);
+INSERT INTO `advert`(car_id, seller_id, price) VALUES (4,2,800);
+INSERT INTO `advert`(car_id, seller_id, price) VALUES (5,3,700);
+INSERT INTO `advert`(car_id, seller_id, price) VALUES (6,3,600);
 
-INSERT INTO `deal`(buyer_id,seller_id,price,advert_id) VALUES (12,7,600,9);
-INSERT INTO `deal`(buyer_id,seller_id,price,advert_id) VALUES (12,7,600,7);
-INSERT INTO `deal`(buyer_id,seller_id,price,advert_id) VALUES (12,7,600,8);
-INSERT INTO `deal`(buyer_id,seller_id,price,advert_id) VALUES (11,7,600,9);
-INSERT INTO `deal`(buyer_id,seller_id,price,advert_id) VALUES (11,9,600,13);
-INSERT INTO `deal`(buyer_id,seller_id,price,advert_id) VALUES (11,10,600,14);
+INSERT INTO `deal`(buyer_id, price, advert_id) VALUES (5,600,1);
+INSERT INTO `deal`(buyer_id, price, advert_id) VALUES (5,600,2);
+INSERT INTO `deal`(buyer_id, price, advert_id) VALUES (5,600,1);
+INSERT INTO `deal`(buyer_id, price, advert_id) VALUES (5,600,2);
+INSERT INTO `deal`(buyer_id, price, advert_id) VALUES (6,600,3);
+INSERT INTO `deal`(buyer_id, price, advert_id) VALUES (6,600,4);
 
 
 
@@ -85,16 +84,18 @@ GROUP BY d.advert_id
 
 SELECT MAX(d.price), a.car_id 
 FROM `deal` AS d 
-JOIN `advert` AS a ON 
+JOIN `advert` AS a
+ON 
 d.advert_id = a.`advert_id`
-WHERE d.status = "Approved"
+WHERE d.status = "Active"
 GROUP BY d.advert_id
 
-
-SELECT c.year,COUNT(c.year) AS c
+ SELECT * from (SELECT Count(*) as count, year
 FROM advert AS a JOIN car AS c ON
  a.car_id = c.id 
  WHERE a.status = "Closed" 
- GROUP BY c.year
- ORDER BY c
- DESC LIMIT 1
+ Group By year) as f1 where count = (select max(count) from (SELECT Count(*) as count, year
+FROM advert AS a JOIN car AS c ON
+ a.car_id = c.id 
+ WHERE a.status = "Closed" 
+ Group By year) as f2);
