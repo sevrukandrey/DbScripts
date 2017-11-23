@@ -25,7 +25,8 @@ CREATE TABLE `advert`(
 `seller_id` BIGINT UNSIGNED NOT NULL,
 `price` DOUBLE UNSIGNED NOT NULL,
 `deal_id` BIGINT UNSIGNED DEFAULT NULL,
-CONSTRAINT UC_Car UNIQUE (`car_id`,`deal_id`),
+`status` ENUM('Open','Closed') DEFAULT 'Open',
+CONSTRAINT UC_Car UNIQUE (`car_id`,`status`),
 PRIMARY KEY (id),
 FOREIGN KEY (car_id) REFERENCES `car`(id),
 FOREIGN KEY (seller_id) REFERENCES `client`(id)
