@@ -26,13 +26,13 @@ CREATE TABLE `advert`(
 `price` DOUBLE UNSIGNED NOT NULL,
 `deal_id` BIGINT UNSIGNED DEFAULT NULL,
 `status` ENUM('Open','Closed') DEFAULT 'Open',
-CONSTRAINT UC_Car UNIQUE (`car_id`,`status`),
 PRIMARY KEY (id),
 FOREIGN KEY (car_id) REFERENCES `car`(id),
 FOREIGN KEY (seller_id) REFERENCES `client`(id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DELIMITER $$
+DELIMITER 
+$$
 CREATE TRIGGER price_should_be_bigger_then_zero
   BEFORE INSERT ON advert
   FOR EACH ROW
@@ -51,6 +51,28 @@ BEFORE UPDATE ON advert
     END IF;
   END;
  $$ 
+ CREATE TRIGGER only_one_car_allow_to_sale_in_one_time
+ BEFORE INSERT ON advert
+ FOR EACH ROW
+   BEGIN
+     IF NEW.status = 'Open' AND
+        (SELECT COUNT(id) FROM `advert` WHERE status='Open' AND car_id = NEW.car_id) > 0
+     THEN
+      SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'Only one car can be in advert with status Open';
+      END IF;
+ END;
+ $$
+ CREATE TRIGGER only_one_car_allow_to_sale_in_one_time
+ BEFORE UPDATE ON advert
+ FOR EACH ROW
+   BEGIN
+     IF NEW.status = 'Open' AND
+        (SELECT COUNT(id) FROM `advert` WHERE status='Open' AND car_id = NEW.car_id) > 0
+     THEN
+      SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'Only one car can be in advert with status Open';
+      END IF;
+ END;
+ $$
 DELIMITER ;
 
 CREATE TABLE `deal` (
