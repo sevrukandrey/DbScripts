@@ -12,7 +12,7 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `car` (
 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-`vin_code` VARCHAR(25) NOT NULL,
+`plate_number` VARCHAR(25) NOT NULL,
 `year` YEAR(4) NOT NULL,
 `color` VARCHAR(20) DEFAULT NULL,
 `model` VARCHAR(20) NOT NULL,
@@ -92,13 +92,13 @@ INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Sasha", "Ivanov","14558
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Tom", "Deny","32123");
 INSERT INTO `client`(NAME,surname,phone_number) VALUES ("Jack", "Tomer","14532211585");
 
-INSERT INTO `car`(vin_code, YEAR, color, model) VALUES ("1212", 2015,"black","fiesta");
-INSERT INTO `car`(vin_code, YEAR, color, model) VALUES ("1515", 2013,"green","x5");
-INSERT INTO `car`(vin_code, YEAR, color, model) VALUES ("1213", 2016,"black","rio");
-INSERT INTO `car`(vin_code, YEAR, color, model) VALUES ("1312", 2010,"black","c4");
-INSERT INTO `car`(vin_code, YEAR, color, model) VALUES ("1234", 2013,"green","x3");
-INSERT INTO `car`(vin_code, YEAR, color, model) VALUES ("12356", 2015,"black","golf");
-INSERT INTO `car`(vin_code, YEAR, color, model) VALUES ("43221", 2003,"red","c1");
+INSERT INTO `car`(plate_number, YEAR, color, model) VALUES ("1212", 2015,"black","fiesta");
+INSERT INTO `car`(plate_number, YEAR, color, model) VALUES ("1515", 2013,"green","x5");
+INSERT INTO `car`(plate_number, YEAR, color, model) VALUES ("1213", 2016,"black","rio");
+INSERT INTO `car`(plate_number, YEAR, color, model) VALUES ("1312", 2010,"black","c4");
+INSERT INTO `car`(plate_number, YEAR, color, model) VALUES ("1234", 2013,"green","x3");
+INSERT INTO `car`(plate_number, YEAR, color, model) VALUES ("12356", 2015,"black","golf");
+INSERT INTO `car`(plate_number, YEAR, color, model) VALUES ("43221", 2003,"red","c1");
 
 INSERT INTO `advert`(car_id, seller_id, price) VALUES (1,1,2000);
 INSERT INTO `advert`(car_id, seller_id, price) VALUES (2,2,3000);
