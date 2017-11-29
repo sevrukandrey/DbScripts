@@ -66,8 +66,8 @@ BEFORE UPDATE ON advert
  BEFORE UPDATE ON advert
  FOR EACH ROW
    BEGIN
-     IF NEW.status = 'Open' AND
-        (SELECT COUNT(id) FROM `advert` WHERE STATUS='Open' AND car_id = NEW.car_id) > 1
+     IF NEW.status = 'Open' AND NEW.status <> OLD.status AND
+        (SELECT COUNT(id) FROM `advert` WHERE STATUS='Open' AND car_id = NEW.car_id) > 0
      THEN
       SIGNAL SQLSTATE '22003' SET MESSAGE_TEXT = 'Only one car can be in advert with status Open';
       END IF;
